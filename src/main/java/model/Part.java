@@ -1,4 +1,4 @@
-package model;
+ package model;
 /**
  * Supplied class Part.java
  */
@@ -21,9 +21,6 @@ public abstract class Part {
         this.stock = stock;
         this.min = min;
         this.max = max;
-    }
-
-    protected Part() {
     }
 
     /**
