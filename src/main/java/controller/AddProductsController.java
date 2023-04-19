@@ -202,15 +202,21 @@ public class AddProductsController implements Initializable {
 
     /**Removes added product*/
     public void onClickRemoveAddProductsPageButton(ActionEvent actionEvent) {
-        Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION, "Want to delete!");
-        deleteAlert.setContentText("Deleted!");
-        Optional<ButtonType> answer = deleteAlert.showAndWait();
-        if (answer.isPresent() && answer.get() == ButtonType.OK) {
-            Part part = partAddProductTableAdded.getSelectionModel().getSelectedItem();
-            if (productNew.deleteAssociatedPart(part)) {
-                productNew.getAllAssociatedParts().remove(partAddProductTableAdded.getSelectionModel().getSelectedItem());
+        Part part = partAddProductTableAdded.getSelectionModel().getSelectedItem();
+
+        if (part == null){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Part not selected!");
+            alert.showAndWait();
+        } else {
+            Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION, "Want to delete!");
+            Optional<ButtonType> answer = deleteAlert.showAndWait();
+
+            if (answer.isPresent() && answer.get() == ButtonType.OK) {
+                partAdded.remove(part);
+                partAddProductTableAdded.setItems(partAdded);
             }
-            partAdded = productNew.getAllAssociatedParts();
         }
     }
 
