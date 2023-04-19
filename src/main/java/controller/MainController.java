@@ -294,37 +294,46 @@ public class MainController implements Initializable {
         /**Action Deletes Product from Main Screen FXML page*/
         @FXML
         void onClickedDeleteProduct() {
-            Alert productAlert = new Alert(Alert.AlertType.CONFIRMATION, "Want to delete Product?");
-            productAlert.setTitle("Product deleted!");
-            Optional<ButtonType> answer = productAlert.showAndWait();
-            if(answer.isPresent() && answer.get() == ButtonType.OK) {
-                try {
-                   Product product = tableProducts.getSelectionModel().getSelectedItem();
-                   if (product.getAllAssociatedParts().isEmpty()) {
-                       deleteProduct(product);
-                   }
-                   else {
-                       productAlert = new Alert(Alert.AlertType.ERROR, "Need to delete associated part first");
-                       productAlert.showAndWait();
-                   }
-                }
-                catch (UnsupportedOperationException error){
-                    productAlert.setContentText("No product selected!");
-                    productAlert.showAndWait();
+
+            Product product = tableProducts.getSelectionModel().getSelectedItem();
+
+            if (product == null) {
+                Alert alertError = new Alert(Alert.AlertType.ERROR);
+                alertError.setTitle("Error");
+                alertError.setHeaderText("Product not selected");
+                alertError.showAndWait();
+            } else {
+                Alert productAlert = new Alert(Alert.AlertType.CONFIRMATION, "Want to delete Product?");
+                Optional<ButtonType> answer = productAlert.showAndWait();
+
+                if (answer.isPresent() && answer.get() == ButtonType.OK) {
+                    ObservableList<Part> assopart = product.getAllAssociatedParts();
+                    if (assopart.size() >= 1) {
+                        productAlert = new Alert(Alert.AlertType.ERROR, "Need to delete associated part first!");
+                        productAlert.showAndWait();
+                    } else {
+                        deleteProduct(product);
+                    }
                 }
             }
         }
 
+
         /**Action Deletes Part from Main Screen FXML page*/
         @FXML
         void onClickedDeletePart() {
-            Alert partAlert = new Alert(Alert.AlertType.CONFIRMATION, "Ready to delete part?");
-            partAlert.setTitle("Deleted Part!");
-            Optional<ButtonType> answer = partAlert.showAndWait();
-            if (answer.isPresent() && answer.get() == ButtonType.OK) {
-                Part part;
-                part = tableParts.getSelectionModel().getSelectedItem();
-                deletePart(part);
+            Part part = tableParts.getSelectionModel().getSelectedItem();
+            if (part == null) {
+                Alert alertError = new Alert(Alert.AlertType.ERROR);
+                alertError.setTitle("Error");
+                alertError.setHeaderText("Part not selected!");
+                alertError.showAndWait();
+            } else {
+                Alert partAlert = new Alert(Alert.AlertType.CONFIRMATION, "Ready to delete part?");
+                Optional<ButtonType> answer = partAlert.showAndWait();
+                if (answer.isPresent() && answer.get() == ButtonType.OK) {
+                    Inventory.deletePart(part);
+                }
             }
         }
 
