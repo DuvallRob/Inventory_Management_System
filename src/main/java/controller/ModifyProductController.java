@@ -28,8 +28,12 @@ import static model.Inventory.*;
  * Student ID: 007792396
  */
 
-/**ModifyProductController class for modify-product.fxml*/
-public class ModifyProductController implements Initializable{
+/**
+ * This class is the controller for the modify-product.fxml file, which is responsible for modifying an existing product.
+ * It implements the Initializable interface to initialize the controller after its root element has been completely processed.
+ */
+public class ModifyProductController implements Initializable {
+    
     /**
      * The product to be modified.
      */
@@ -187,7 +191,7 @@ public class ModifyProductController implements Initializable{
      */
     @FXML
     private Button cancelModifyProductPage;
-    
+
     /**
      * This method handles the click event of the "Cancel" button on the "Modify Product" page and takes the user back to the main page.
      *
