@@ -11,22 +11,50 @@ import javafx.collections.ObservableList;
  * Student ID: 007792396
  */
 
-/**Class of Product.java for objects with no inheritance*/
+/**
+ * The Product class represents a product in the inventory management system.
+ * It contains information about the product, such as its ID, name, price, stock, minimum, and maximum.
+ * It also allows for parts to be associated with the product.
+ */
 public class Product {
-    private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
+    /** The unique identifier of the product.*/
     private int idProduct;
+
+    /** The name of the product.*/
     private String name;
+
+    /** The price of the product.*/
     private double price;
+
+    /** The current stock level of the product.*/
     private int stock;
+
+    /** The minimum stock level of the product.*/
     private int min;
+
+    /** The maximum stock level of the product.*/
     private int max;
+
+    /** The list of associated parts with this product.*/
+    private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
+
+    /**
+    * Constructs a new Product instance with the specified details.
+    *
+    * @param idProduct the unique identifier of the product.
+    * @param name      the name of the product.
+    * @param price     the price of the product.
+    * @param stock     the current stock level of the product.
+    * @param min       the minimum stock level of the product.
+    * @param max       the maximum stock level of the product.
+    */
     public Product(int idProduct, String name, double price, int stock, int min, int max) {
-        this.idProduct = idProduct;
-        this.name = name;
-        this.price = price;
-        this.stock = stock;
-        this.min = min;
-        this.max = max;
+      this.idProduct = idProduct;
+      this.name = name;
+      this.price = price;
+      this.stock = stock;
+      this.min = min;
+      this.max = max;
     }
 
     /**@param idProduct is the product's ID that will be set*/
