@@ -6,6 +6,8 @@
 /**
  *
  * @author Duvall Roberts
+ * drob801@wgu.edu
+ * Student ID: 007792396
  */
 public abstract class Part {
     private int id;
