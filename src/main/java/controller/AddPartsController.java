@@ -29,47 +29,92 @@ import javafx.stage.Stage;
  * Student ID: 007792396
  */
 
-/**Class AddPartsController for add-parts.fxml*/
+/**Class AddPartsController provides control logic for add-parts.fxml*/
 public class AddPartsController {
+
+    /**
+     * Represents the "House" radio button for adding a part.
+     */
     @FXML
     private RadioButton houseAddPartButton;
 
+    /**
+     * Represents the "Outsourced" radio button for adding a part.
+     */
     @FXML
     private RadioButton outAddPartButton;
-    
+
+    /**
+     * Represents the "Cancel" button on the Add Parts page.
+     */
     @FXML
     private Button cancelAddPartsPage;
-    
+
+    /**
+     * Represents the "Save" button on the Add Parts page.
+     */
     @FXML
     private Button saveAddPartsPage;
 
+    /**
+     * Represents the label for the Machine ID field on the Add Parts page.
+     */
     @FXML
     private Label machineIDAddPart;
 
+    /**
+     * Represents the ID field for adding a part.
+     */
     @FXML
     private TextField idAddPart;
 
+    /**
+     * Represents the name field for adding a part.
+     */
     @FXML
     private TextField nameAddPart;
 
+    /**
+     * Represents the inventory level field for adding a part.
+     */
     @FXML
     private TextField inventoryAddPart;
 
+    /**
+     * Represents the price field for adding a part.
+     */
     @FXML
     private TextField priceAddPart;
 
+    /**
+     * Represents the maximum inventory level field for adding a part.
+     */
     @FXML
     private TextField maxAddPart;
 
+    /**
+     * Represents the minimum inventory level field for adding a part.
+     */
     @FXML
     private TextField minAddPart;
 
+    /**
+     * Represents the Machine ID field for adding a part.
+     */
     @FXML
     private TextField macAddPart;
 
+    /**
+     * This is a private boolean variable named "isHouse".
+     * It is set to true.
+     */
     private boolean isHouse = true;
 
-    /**Takes user back to main screen*/
+    /**
+     * Takes the user back to the main screen when the "Cancel" button is clicked on the "Add Parts" page.
+     *
+     * @throws IOException if an input or output exception occurs while the FXMLLoader loads the main screen.
+     */
     @FXML
     void onClickCancelAddPartsPageButton() throws IOException {
 
@@ -83,23 +128,34 @@ public class AddPartsController {
         }
 
     }
+
     public void idAddPart(ActionEvent event){
 
     }
 
-    /**Function for when In-House is clicked*/
+    /**
+     * Sets the machineIDAddPart text to "Machine ID" and sets the isHouse boolean to true when the "In-House" button is clicked.
+     * @param actionEvent The action event triggered by clicking the "In-House" button.
+     */
     public void houseOnClickedAddPart(ActionEvent actionEvent) {
         isHouse = true;
         machineIDAddPart.setText("Machine ID");
     }
 
-    /**Function for when Outsourced is clicked*/
+    /**
+     * Sets the machineIDAddPart text to "Company Name" and sets the isHouse boolean to false when the "Outsourced" button is clicked.
+     * @param actionEvent The action event triggered by clicking the "Outsourced" button.
+     */
     public void outOnClickedAddPart(ActionEvent actionEvent) {
         isHouse = false;
         machineIDAddPart.setText("Company Name");
     }
 
-    /**Adds part*/
+    /**
+     * Attempts to add a part to the inventory using the information provided by the user. Displays an error message if any of the input fields are invalid.
+     * @param actionEvent The action event triggered by clicking the "Save" button.
+     * @throws IOException if an I/O error occurs.
+     */
     @FXML
     public void onClickSaveAddPartsPageButton(ActionEvent actionEvent) throws IOException{
 
