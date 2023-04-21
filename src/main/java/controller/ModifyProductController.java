@@ -30,8 +30,9 @@ import static model.Inventory.*;
 
 /**ModifyProductController class for modify-product.fxml*/
 public class ModifyProductController implements Initializable{
-    Product productNew;
     Product productSelected;
+
+    ObservableList<Part> partModProd = FXCollections.observableArrayList();
     int indexSelected;
 
     @FXML
@@ -123,8 +124,8 @@ public class ModifyProductController implements Initializable{
         partInventoryMod.setCellValueFactory(new PropertyValueFactory<>("stock"));
         partPriceMod.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-        productNew = new Product(0, null, 0.0, 0, 0, 0);
-        tableModifyAssociatedPart.setItems(productNew.getAllAssociatedParts());
+        productSelected = new Product(0, null, 0.0, 0, 0, 0);
+        tableModifyAssociatedPart.setItems(productSelected.getAllAssociatedParts());
 
         associatedPartIdMod.setCellValueFactory(new PropertyValueFactory<>("id"));
         associatedPartNameMod.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -197,21 +198,28 @@ public class ModifyProductController implements Initializable{
     /**Removes selected from associated table*/
     public void removeModifyProductButton(ActionEvent actionEvent) {
 
-        Alert remAlert = new Alert(Alert.AlertType.CONFIRMATION, "Want to remove part?");
-        Optional<ButtonType> answer = remAlert.showAndWait();
-        if (answer.isPresent() && answer.get() == ButtonType.OK) {
-            Part part = tableModifyAssociatedPart.getSelectionModel().getSelectedItem();
-            if (productSelected.deleteAssociatedPart(part)) {
-                productSelected.getAllAssociatedParts().remove(tableModifyAssociatedPart.getSelectionModel().getSelectedItem());
+        Part part = tableModifyAssociatedPart.getSelectionModel().getSelectedItem();
+
+        if (part == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Part not selected!");
+            alert.showAndWait();
+        } else {
+            Alert remAlert = new Alert(Alert.AlertType.CONFIRMATION, "Want to remove part?");
+            Optional<ButtonType> answer = remAlert.showAndWait();
+            if (answer.isPresent() && answer.get() == ButtonType.OK) {
+               partModProd.remove(part);
+               tableModifyAssociatedPart.setItems(partModProd);
             }
         }
-
     }
 
     /**Adds to associated table*/
     public void addModifyProductButton(ActionEvent actionEvent) {
         Part part = tableModifyPart.getSelectionModel().getSelectedItem();
         productSelected.addAssociatedPart(part);
+        partModProd = productSelected.getAllAssociatedParts();
     }
 
     /**Searches for part*/
