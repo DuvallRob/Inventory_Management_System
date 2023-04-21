@@ -15,26 +15,23 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- *
  * The Inventory Management program is a software that manages
  * an inventory of parts and products consisting of parts.
- * 
- * 
  */
 
-/**Class that creates main screen of app*/
+/**
+ * This class creates the main screen of the application.
+ */
 public class main extends Application {
     /**
+     * This method creates an FXML stage and loads the initial scene.
      *
-     * The start method that creates FXML stage and loads initial scene.
-     * 
-     * @param stage 
-     * @throws Exception
+     * @param stage The primary stage for the application
+     * @throws Exception if the FXML file fails to load
      */
     @Override
     public void start(Stage stage) throws Exception {
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/main-screen.fxml"));//Location of Main Screen FXML document
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/main-screen.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -42,11 +39,9 @@ public class main extends Application {
     }
 
     /**
-     * Main method is starting point of application.
-     * 
-     * Main method launches application.
-     * 
-     * @param args 
+     * This is the main method of the application, which is the starting point of the application.
+     *
+     * @param args The command line arguments passed to the application
      */
     public static void main(String[] args) {
         launch(args);
