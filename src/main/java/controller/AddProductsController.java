@@ -212,7 +212,6 @@ public class AddProductsController implements Initializable {
         } else {
             Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION, "Want to delete!");
             Optional<ButtonType> answer = deleteAlert.showAndWait();
-
             if (answer.isPresent() && answer.get() == ButtonType.OK) {
                 partAdded.remove(part);
                 partAddProductTableAdded.setItems(partAdded);
@@ -227,56 +226,51 @@ public class AddProductsController implements Initializable {
         partAdded = productNew.getAllAssociatedParts();
     }
 
-    /**Function for pressing enter after user uses search bar*/
-    public void enterKeyEvent(KeyEvent actionEvent) {
-        if(actionEvent.getCode().equals(KeyCode.ENTER)) {
-            searchAddProduct();
-        }
-    }
-
     /**Function of search that is applied when enter is pressed*/
-    public void searchAddProduct() {
+    public void searchAddProduct(ActionEvent event) {
         String partSearched = searchAddProduct.getText();
-        if (partSearched.equals("")) {
-            Alert spaceAlert = new Alert(Alert.AlertType.WARNING);
-            spaceAlert.setContentText("No Part ID or Name entered");
-            spaceAlert.showAndWait();
+
+        if(partSearched.equals("")) {
+            Alert partAlert = new Alert(Alert.AlertType.WARNING);
+            partAlert.setTitle("Warning");
+            partAlert.setContentText("You did not put ID nor Name");
+            partAlert.showAndWait();
             partAddProductTable.setItems(getAllParts());
         } else {
-            boolean productFoundBool = false;
+            boolean finds = false;
             try {
-                Part partFound = lookupPart(Integer.parseInt(partSearched));
-                if (partFound != null) {
-                    ObservableList<Part> part = FXCollections.observableArrayList();
-                    part.add(partFound);
-                    partAddProductTable.setItems(part);
-                } else {
-                    Alert searchAlert = new Alert(Alert.AlertType.WARNING);
-                    searchAlert.setContentText("No Part ID Matched!");
-                    searchAlert.showAndWait();
-                    updatePartTable();
+                Part foundPart = lookupPart(Integer.parseInt(partSearched));
+                if (foundPart != null) {
+                    ObservableList<Part> parts = FXCollections.observableArrayList();
+                    parts.add(foundPart);
+                    partAddProductTable.setItems(parts);
+                }
+                else {
+                    Alert partAlert = new Alert(Alert.AlertType.WARNING);
+                    partAlert.setContentText("Does not match any Part ID");
+                    partAlert.showAndWait();
+                    partAddProductTable.setItems(getAllParts());
                 }
             } catch (NumberFormatException e) {
-                ObservableList<Part> parts = getAllParts();
-                if(parts.isEmpty()){
+                ObservableList<Part> partsAll = getAllParts();
+                if(partsAll.isEmpty()){
                     Alert partAlert = new Alert(Alert.AlertType.WARNING);
-                    partAlert.setContentText("Please add parts first!");
+                    partAlert.setContentText("No parts\nAdd parts to parts list first");
                     partAlert.showAndWait();
-                    updatePartTable();
-
+                    partAddProductTable.setItems(getAllParts());
                 } else {
-                    for (int i = 0; i < parts.size(); i++) {
-                        Part p = parts.get(i);
-                        if (p.getName().equals(partSearched)) {
-                            productFoundBool = true;
-                            ObservableList part = lookupPart(partSearched);
+                    for (int i = 0; i < partsAll.size(); i++) {
+                        Part p_art = partsAll.get(i);
+                        if (p_art.getName().equals(partSearched)) {
+                            finds = true;
+                            ObservableList parts = lookupPart(partSearched);
                             partAddProductTable.setItems(parts);
                         }
-                    }   if (!productFoundBool) {
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setContentText("Does not match any part name!");
-                        alert.showAndWait();
-                        updatePartTable();
+                    } if (finds == false) {
+                        Alert partAlert = new Alert(Alert.AlertType.WARNING);
+                        partAlert.setContentText("No match to part name!");
+                        partAlert.showAndWait();
+                        partAddProductTable.setItems(getAllParts());
                     }
                 }
             }
