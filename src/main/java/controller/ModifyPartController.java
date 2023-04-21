@@ -1,25 +1,21 @@
 package controller;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Optional;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
-import model.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import model.Product;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import model.InHouse;
+import model.Outsourced;
+import model.Part;
+import model.Inventory;
+import java.io.IOException;
+import java.util.Optional;
 
+import static model.Inventory.updatePart;
 
-import static model.Inventory.*;
 /**
  *
  * @author
@@ -28,249 +24,221 @@ import static model.Inventory.*;
  * Student ID: 007792396
  */
 
-/**ModifyProductController class for modify-product.fxml*/
-public class ModifyProductController implements Initializable{
-    Product productNew;
-    Product productSelected;
+/**
+ * The ModifyPartController class controls the functionality of the modify-parts.fxml view.
+ */
+public class ModifyPartController {
+    /**
+     * The private variable representing the selected private part.
+     */
+    private Part partSelected;
 
-    ObservableList<Part> partModProd = FXCollections.observableArrayList();
-    int indexSelected;
+    /**
+     * The private variable representing the index of the selected private part.
+     */
+    private int indexSelected;
 
+    /**
+     * The ToggleGroup for the RadioButtons.
+     */
     @FXML
-    private TextField IDProductAddTextField;
+    private ToggleGroup RadioButton;
 
+    /**
+     * The RadioButton for modifying a part in-house.
+     */
     @FXML
-    private TextField NameProductAddTextField;
+    private RadioButton houseModifyPart;
 
+    /**
+     * The RadioButton for modifying a part outside the company.
+     */
     @FXML
-    private TextField InventoryProductAddTextField;
+    private RadioButton outModifyPart;
 
+    /**
+     * The Label for displaying the machine ID of the part being modified.
+     */
     @FXML
-    private TextField PriceProductAddTextField;
+    private Label machineIdModifyPart;
 
+    /**
+     * The TextField for entering the ID of the part being modified.
+     */
     @FXML
-    private TextField MaxProductAddTextField;
+    private TextField idModifyPart;
 
+    /**
+     * The TextField for entering the name of the part being modified.
+     */
     @FXML
-    private TextField MinProductAddTextField;
+    private TextField nameModifyPart;
 
+    /**
+     * The TextField for entering the inventory level of the part being modified.
+     */
     @FXML
-    private TableView<Part> tableModifyPart;
+    private TextField inventoryModifyPart;
 
+    /**
+     * The TextField for entering the price of the part being modified.
+     */
     @FXML
-    private TableColumn<Part, Integer> partIdMod;
+    private TextField priceModifyPart;
 
+    /**
+     * The TextField for entering the maximum quantity of the part being modified.
+     */
     @FXML
-    private TableColumn<Part, String> partNameMod;
+    private TextField maxModifyPart;
 
+    /**
+     * The TextField for entering the minimum quantity of the part being modified.
+     */
     @FXML
-    private TableColumn<Part, Integer> partInventoryMod;
+    private TextField minModifyPart;
 
+    /**
+     * The TextField for entering the machine ID of the part being modified.
+     */
     @FXML
-    private TableColumn<Part, Double> partPriceMod;
+    private TextField machIneModifyPart;
 
+    /**
+     * The Button for saving the modifications made to the part.
+     */
     @FXML
-    private TableView<Part> tableModifyAssociatedPart;
+    private Button saveModifyPart;
 
+    /**
+     * The Button for canceling the modification of the part and returning to the main page.
+     */
     @FXML
-    private TableColumn<Part, Integer> associatedPartIdMod;
+    private Button cancelModifyPartPage;
 
+    /**
+     * Handles events when the "House" radio button is clicked on the Modify Part page.
+     * Sets the text of the "Machine ID" label to "Machine ID".
+     * @param event An ActionEvent object.
+     */
     @FXML
-    private TableColumn<Part, String> associatedPartNameMod;
+    public void houseOnClickedModifyPart(ActionEvent event){
+        machineIdModifyPart.setText("Machine ID");
+    }
 
+    /**
+     * Handles events when the "Outsourced" radio button is clicked on the Modify Part page.
+     * Sets the text of the "Machine ID" label to "Company Name".
+     * @param event An ActionEvent object.
+     */
     @FXML
-    private TableColumn<Part, Integer> associatedPartInventoryMod;
+    public void outOnClickedModifyPart(ActionEvent event){
+        machineIdModifyPart.setText("Company Name");
+    }
 
+    /**
+     * Handles events when the "Cancel" button is clicked on the Modify Part page.
+     * Redirects the user back to the main screen.
+     * @throws IOException If an input/output error occurs.
+     */
     @FXML
-    private TableColumn<Part, Double> associatedPartPriceMod;
+    public void onClickCancelModifyPartPageButton() throws IOException {
 
-    @FXML
-    private TextField modifyProductSearch;
-
-    @FXML
-    private Button addModifyProductPage;
-
-    @FXML
-    private Button removeModifyProductPage;
-
-    @FXML
-    private Button saveModifyProductPage;
-
-    @FXML
-    private Button cancelModifyProductPage;
-
-    /**Takes user back to Main Page*/
-    @FXML
-    void onClickCancelModifyProductPageButton() throws IOException {
-
-        Stage stage = (Stage)cancelModifyProductPage.getScene().getWindow();
+        Stage stage = (Stage)cancelModifyPartPage.getScene().getWindow();
         Object scene = FXMLLoader.load(getClass().getResource("/main/main-screen.fxml"));
         stage.setScene(new Scene((Parent) scene));
         stage.show();
 
     }
 
-    /**Updates current part*/
-    public void updateTablePart() {
-        tableModifyPart.setItems(getAllParts());
-    }
-    /**Initialize controllers and populates the part and product tables.*/
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-
-        updateTablePart();
-
-        partIdMod.setCellValueFactory(new PropertyValueFactory<>("id"));
-        partNameMod.setCellValueFactory(new PropertyValueFactory<>("name"));
-        partInventoryMod.setCellValueFactory(new PropertyValueFactory<>("stock"));
-        partPriceMod.setCellValueFactory(new PropertyValueFactory<>("price"));
-
-        productNew = new Product(0, null, 0.0, 0, 0, 0);
-        tableModifyAssociatedPart.setItems(productNew.getAllAssociatedParts());
-
-        associatedPartIdMod.setCellValueFactory(new PropertyValueFactory<>("id"));
-        associatedPartNameMod.setCellValueFactory(new PropertyValueFactory<>("name"));
-        associatedPartInventoryMod.setCellValueFactory(new PropertyValueFactory<>("stock"));
-        associatedPartPriceMod.setCellValueFactory(new PropertyValueFactory<>("price"));
-
-    }
-
-    /**Function for setting product*/
-    public void setProduct(Product product, int index) {
-        productSelected = product;
+    /**
+     * Sets the values of the text fields on the Modify Part page to those of the selected part.
+     * @param part A Part object representing the selected part.
+     * @param index An integer representing the index of the selected part.
+     */
+    public void setPart(Part part, int index) {
+        partSelected = part;
         indexSelected = index;
-        if (product instanceof Product) {
-            Product productNew = productSelected;
 
-            this.NameProductAddTextField.setText(productNew.getName());
-            this.InventoryProductAddTextField.setText((Integer.toString(productNew.getStock())));
-            this.PriceProductAddTextField.setText((Double.toString(productNew.getPrice())));
-            this.MaxProductAddTextField.setText((Integer.toString(productNew.getMax())));
-            this.MinProductAddTextField.setText((Integer.toString(productNew.getMin())));
-            tableModifyAssociatedPart.setItems(productNew.getAllAssociatedParts());
-            updateProduct(indexSelected, productNew);
+        if (part instanceof InHouse) {
+            InHouse partNew = (InHouse) part;
+            houseModifyPart.setSelected(true);
+            machineIdModifyPart.setText("Machine ID");
+            this.nameModifyPart.setText(partNew.getName());
+            this.inventoryModifyPart.setText(String.valueOf(partNew.getStock()));
+            this.priceModifyPart.setText(String.valueOf(partNew.getPrice()));
+            this.minModifyPart.setText(String.valueOf(partNew.getMin()));
+            this.maxModifyPart.setText(String.valueOf(partNew.getMax()));
+            this.machIneModifyPart.setText(String.valueOf(partNew.getMachineId()));
+            this.idModifyPart.setText(String.valueOf(partNew.getId()));
+        }else if (part instanceof Outsourced){
+            Outsourced partNew = (Outsourced) part;
+            outModifyPart.setSelected(true);
+            machineIdModifyPart.setText("Company Name");
+            this.nameModifyPart.setText(partNew.getName());
+            this.inventoryModifyPart.setText(String.valueOf(partNew.getStock()));
+            this.priceModifyPart.setText(String.valueOf(partNew.getPrice()));
+            this.minModifyPart.setText(String.valueOf(partNew.getMin()));
+            this.maxModifyPart.setText(String.valueOf(partNew.getMax()));
+            this.machIneModifyPart.setText(String.valueOf(partNew.getCompanyName()));
+            this.idModifyPart.setText(String.valueOf(partNew.getId()));
         }
     }
 
-    /**Updates current part and adds as new Product*/
-    @FXML
-    public void saveModifyProductButton(ActionEvent actionEvent) throws IOException {
+    /**
+     * Handles events when the "Save" button is clicked on the Modify Part page.
+     * Validates user input and updates the selected part in the Inventory list.
+     * Redirects the user back to the main screen.
+     * @param event An ActionEvent object.
+     * @throws IOException If an input/output error occurs.
+     */
+    public void saveOnClickedModifyPart(ActionEvent event) throws IOException {
         try {
-            if (!(Integer.class.isInstance(Integer.parseInt(InventoryProductAddTextField.getText())))){
-                Alert invAlert = new Alert(Alert.AlertType.ERROR, "Inventory value needs to be number!");
-                invAlert.showAndWait();
-            } else if (!(Double.class.isInstance(Double.parseDouble(PriceProductAddTextField.getText())))) {
-                Alert priceAlert = new Alert(Alert.AlertType.ERROR, "Inventory value needs to be number!");
-                priceAlert.showAndWait();
-        } else if (Integer.parseInt(MaxProductAddTextField.getText()) < Integer.parseInt(MinProductAddTextField.getText())){
-                Alert minAlert = new Alert(Alert.AlertType.ERROR, "Minimum can't be greater than maximum!");
-                minAlert.showAndWait();
-            } else if (Integer.parseInt(InventoryProductAddTextField.getText()) < Integer.parseInt(MinProductAddTextField.getText()) || Integer.parseInt(InventoryProductAddTextField.getText()) > Integer.parseInt(MaxProductAddTextField.getText())){
-                Alert invMaxAlert = new Alert(Alert.AlertType.ERROR, "Inventory amount must with the range of minimum and maximum!");
-                invMaxAlert.showAndWait();
+            int inventory = Integer.parseInt(inventoryModifyPart.getText());
+            double price = Double.parseDouble(priceModifyPart.getText());
+            int max = Integer.parseInt(maxModifyPart.getText());
+            int min = Integer.parseInt(minModifyPart.getText());
+
+            StringBuilder errorMessage = new StringBuilder();
+
+            if (inventory < min || inventory > max) {
+                errorMessage.append("Inventory amount must be within the range of minimum and maximum!\n");
+            }
+
+            if (min > max) {
+                errorMessage.append("Minimum can't be greater than maximum!\n");
+            }
+
+            if (errorMessage.length() > 0) {
+
+                Alert alert = new Alert(Alert.AlertType.ERROR, errorMessage.toString());
+                alert.showAndWait();
+                return;
+            }
+
+            int id = partSelected.getId();
+            String name = nameModifyPart.getText();
+
+            if (houseModifyPart.isSelected()) {
+                int machineID = Integer.parseInt(machIneModifyPart.getText());
+                InHouse inhousePart = new InHouse(id, name, price, inventory, min, max, machineID);
+                Inventory.getAllParts().set(indexSelected, inhousePart);
             } else {
-                String modName = NameProductAddTextField.getText();
-                int modInventory = Integer.parseInt(InventoryProductAddTextField.getText());
-                double priceCost = Double.parseDouble(PriceProductAddTextField.getText());
-                int max = Integer.parseInt(MaxProductAddTextField.getText());
-                int min = Integer.parseInt(MinProductAddTextField.getText());
-
-                productSelected.setName(modName);
-                productSelected.setPrice(priceCost);
-                productSelected.setStock(modInventory);
-                productSelected.setMin(min);
-                productSelected.setMax(max);
-
-                updateProduct(indexSelected, productSelected);
-
-                Stage modifyStage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-                Object scene = FXMLLoader.load(getClass().getResource("/main/main-screen.fxml"));
-                modifyStage.setScene(new Scene((Parent) scene));
-                modifyStage.show();
+                String companyName = machIneModifyPart.getText();
+                Outsourced outsourcedPart = new Outsourced(id, name, price, inventory, min, max, companyName);
+                Inventory.getAllParts().set(indexSelected, outsourcedPart);
             }
-        }
-        catch (NumberFormatException e) {
+
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            Object scene = FXMLLoader.load(getClass().getResource("/main/main-screen.fxml"));
+            stage.setScene(new Scene((Parent) scene));
+            stage.show();
+        } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setContentText("Please enter valid value!");
+            alert.setContentText("Please enter a valid value!");
             alert.showAndWait();
         }
     }
 
-    /**Removes selected from associated table*/
-    public void removeModifyProductButton(ActionEvent actionEvent) {
 
-        Part part = tableModifyAssociatedPart.getSelectionModel().getSelectedItem();
-
-        if (part == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Part not selected!");
-            alert.showAndWait();
-        } else {
-            Alert remAlert = new Alert(Alert.AlertType.CONFIRMATION, "Want to remove part?");
-            Optional<ButtonType> answer = remAlert.showAndWait();
-            if (answer.isPresent() && answer.get() == ButtonType.OK) {
-               partModProd.remove(part);
-               tableModifyAssociatedPart.setItems(partModProd);
-            }
-        }
-    }
-
-    /**Adds to associated table*/
-    public void addModifyProductButton(ActionEvent actionEvent) {
-        Part part = tableModifyPart.getSelectionModel().getSelectedItem();
-        productSelected.addAssociatedPart(part);
-    }
-
-    /**Searches for part*/
-    public void searchModifyProductIDName(ActionEvent actionEvent) {
-        String partSearched = modifyProductSearch.getText();
-
-        if(partSearched.equals("")) {
-            Alert partAlert = new Alert(Alert.AlertType.WARNING);
-            partAlert.setTitle("Warning");
-            partAlert.setContentText("You did not put ID nor Name");
-            partAlert.showAndWait();
-            tableModifyPart.setItems(getAllParts());
-        } else {
-            boolean finds = false;
-            try {
-                Part foundPart = lookupPart(Integer.parseInt(partSearched));
-                if (foundPart != null) {
-                    ObservableList<Part> parts = FXCollections.observableArrayList();
-                    parts.add(foundPart);
-                    tableModifyPart.setItems(parts);
-                }
-                else {
-                    Alert partAlert = new Alert(Alert.AlertType.WARNING);
-                    partAlert.setContentText("Does not match any Part ID");
-                    partAlert.showAndWait();
-                    tableModifyPart.setItems(getAllParts());
-                }
-            } catch (NumberFormatException e) {
-                ObservableList<Part> partsAll = getAllParts();
-                if(partsAll.isEmpty()){
-                    Alert partAlert = new Alert(Alert.AlertType.WARNING);
-                    partAlert.setContentText("No parts\nAdd parts to parts list first");
-                    partAlert.showAndWait();
-                    tableModifyPart.setItems(getAllParts());
-                } else {
-                    for (int i = 0; i < partsAll.size(); i++) {
-                        Part p_art = partsAll.get(i);
-                        if (p_art.getName().equals(partSearched)) {
-                            finds = true;
-                            ObservableList parts = lookupPart(partSearched);
-                            tableModifyPart.setItems(parts);
-                        }
-                    } if (finds == false) {
-                        Alert partAlert = new Alert(Alert.AlertType.WARNING);
-                        partAlert.setContentText("No match to part name!");
-                        partAlert.showAndWait();
-                        tableModifyPart.setItems(getAllParts());
-                    }
-                }
-            }
-        }
-        modifyProductSearch.setText("");
-    }
 }
