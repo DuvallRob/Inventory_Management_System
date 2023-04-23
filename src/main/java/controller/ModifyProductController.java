@@ -231,6 +231,7 @@ public class ModifyProductController implements Initializable {
         partPriceMod.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         productSelected = new Product(0, null, 0.0, 0, 0, 0);
+        partModProd = productSelected.getAllAssociatedParts();
         tableModifyAssociatedPart.setItems(productSelected.getAllAssociatedParts());
 
         associatedPartIdMod.setCellValueFactory(new PropertyValueFactory<>("id"));
