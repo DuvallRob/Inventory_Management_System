@@ -152,9 +152,12 @@ public class AddPartsController {
     }
 
     /**
-     * Attempts to add a part to the inventory using the information provided by the user. Displays an error message if any of the input fields are invalid.
-     * @param actionEvent The action event triggered by clicking the "Save" button.
-     * @throws IOException if an I/O error occurs.
+     * This method is called when the "Save" button is clicked on the Add Parts page. It validates the input fields for
+     * errors and adds a new part to the inventory if there are no errors. If an error is found, an error message is shown
+     * to the user. It then navigates back to the main screen.
+     *
+     * @param actionEvent The event that triggered the method call.
+     * @throws IOException if there is an error navigating back to the main screen.
      */
     @FXML
     public void onClickSaveAddPartsPageButton(ActionEvent actionEvent) throws IOException{
